@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 public class WelcomeService {
 
 	public String retrieveWelcomeMessage() {
-		return "Good morning! Updated. Spring-boot-devtools added. Now it works!";
+		return "Good morning! Updated. Spring-boot-devtools added. Now it works!***";
 	}
 }
