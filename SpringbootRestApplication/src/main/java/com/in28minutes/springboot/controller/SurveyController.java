@@ -33,7 +33,7 @@ public class SurveyController {
 		return surveyService.retrieveQuestion(surveyId, questionId);
 	}
 
-	// GET
+	// POST
 	@PostMapping("/surveys/{surveyId}/questions")
 	public ResponseEntity<Void> addQuestionToSurvey(@PathVariable String surveyId, @RequestBody Question newQuestion) {
 		Question question = surveyService.addQuestion(surveyId, newQuestion);
