@@ -12,7 +12,6 @@ public class SpringBootRestApplication {
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
 		ApplicationContext ctx = SpringApplication.run(SpringBootRestApplication.class, args);
-
 	}
 
 }
