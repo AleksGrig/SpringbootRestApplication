@@ -12,11 +12,6 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", role=" + role + "]";
-	}
-
 	private String name;
 	private String role;
 
@@ -28,6 +23,11 @@ public class User {
 		super();
 		this.name = name;
 		this.role = role;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", role=" + role + "]";
 	}
 
 	public long getId() {
