@@ -2,12 +2,11 @@ package com.in28minutes.springboot.controller;
 
 import static org.junit.Assert.assertTrue;
 
-//import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -35,22 +34,24 @@ public class SurveyControllerIT {
 	private TestRestTemplate restTemplate = new TestRestTemplate();
 	private HttpHeaders headers = new HttpHeaders();
 
+	private String retrieveAllQuestionsURL = "/surveys/Survey1/questions/";
+	private String retrieveSpecificQuestionURL = "/surveys/Survey1/questions/Question1";
+
+	private String retrieveURL(String adress) {
+		return "http://localhost:" + port + adress;
+	}
+
+	@Before
+	public void before() {
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));// Accept - application/json
+	}
+
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testRetrieveSurveyQuestion() throws JSONException {
-
-		String url = "http://localhost:" + port + "/surveys/Survey1/questions/Question1";
-		// String output = restTemplate.getForObject(url, String.class);
-
-		// HttpEntity - headers
-		// Accept - application/json
-
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity entity = new HttpEntity<String>(null, headers);
-		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-		// System.out.println("Response: " + response.getBody());
-		// assertTrue(response.getBody().contains("\"id\":\"Question1\""));
+		HttpEntity entity = new HttpEntity<String>(null, headers);// HttpEntity - headers
+		ResponseEntity<String> response = restTemplate.exchange(retrieveURL(retrieveSpecificQuestionURL),
+				HttpMethod.GET, entity, String.class);
 
 		String expected = "{\"id\":\"Question1\",\"description\":\"Largest Country in the World\","
 				+ "\"correctAnswer\":\"Russia\"}";
@@ -59,29 +60,25 @@ public class SurveyControllerIT {
 
 	@Test
 	public void testRetrieveSurveyQuestions() throws Exception {
-		String url = "http://localhost:" + port + "/surveys/Survey1/questions/";
-
-		ResponseEntity<List<Question>> response = restTemplate.exchange(url, HttpMethod.GET,
+		ResponseEntity<List<Question>> response = restTemplate.exchange(retrieveURL(retrieveAllQuestionsURL),
+				HttpMethod.GET,
 				new HttpEntity<String>("DUMMY_DOESNT_MATTER", headers),
 				new ParameterizedTypeReference<List<Question>>() {
 				});
 
 		Question sampleQuestion = new Question("Question1", "Largest Country in the World", "Russia",
 				Arrays.asList("India", "Russia", "United States", "China"));
-
 		assertTrue(response.getBody().contains(sampleQuestion));
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testAddSurveyQuestion() throws Exception {
-		String url = "http://localhost:" + port + "/surveys/Survey1/questions/";
-
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		Question question = new Question("Doesn't matter", "Question", "1", Arrays.asList("1", "2", "3", "4"));
 
 		HttpEntity entity = new HttpEntity<Question>(question, headers);
-		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+		ResponseEntity<String> response = restTemplate.exchange(retrieveURL(retrieveAllQuestionsURL),
+				HttpMethod.POST, entity, String.class);
 
 		String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
 		System.out.println(actual);
