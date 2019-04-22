@@ -49,7 +49,7 @@ public class SurveyControllerIT {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testRetrieveSurveyQuestion() throws JSONException {
-		HttpEntity entity = new HttpEntity<String>(null, headers);// HttpEntity - headers
+		HttpEntity entity = new HttpEntity<String>(null, headers);// HttpEntity - headers + body
 		ResponseEntity<String> response = restTemplate.exchange(retrieveURL(retrieveSpecificQuestionURL),
 				HttpMethod.GET, entity, String.class);
 
